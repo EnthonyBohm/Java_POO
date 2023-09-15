@@ -94,7 +94,7 @@ public class ListaLembretes {
 	//Métodos Especiais
 	@Override
 	public String toString(){
-		return lista.toString() + "\n";
+		return  lista.toString() + "\n";
 	}
 	
 	public ListaLembretes () {

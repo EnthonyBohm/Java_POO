@@ -17,7 +17,7 @@ public class Data implements Comparable <Data> {
 	
 	@Override
 	public String toString () {
-		return ((dia < 10 ? "0"+dia : dia)+ "/" + (mes < 10 ? "0"+mes : mes)+ "/" + "/" + ano);
+		return ((dia < 10 ? "0"+dia : dia)+ "/" + (mes < 10 ? "0"+mes : mes)+ "/" + ano);
 	}
 
 	@Override

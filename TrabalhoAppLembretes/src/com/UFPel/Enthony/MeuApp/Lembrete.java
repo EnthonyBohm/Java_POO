@@ -16,7 +16,7 @@ public class Lembrete implements Comparable<Lembrete> {
 	
 	@Override
 	public String toString() {
-		return "\n" + nomeEvento + " " + "Data: " + data.toString();
+		return "\n" +nomeEvento + " " + "Data: " + data.toString();
 	}
 	@Override
 	public int compareTo(Lembrete o) {
