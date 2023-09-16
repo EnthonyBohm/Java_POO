@@ -1,6 +1,8 @@
 package ufpel.enthony.trabalhofinal;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.HashSet;
@@ -28,8 +30,10 @@ public class Campo extends JPanel{
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 1;
         c.weighty = 1;
+        setPreferredSize(new Dimension(20, 20));
         setLayout(new GridBagLayout());
         setBackground(Color.DARK_GRAY);
+        
         
         
         this.visivel = false;
@@ -70,12 +74,10 @@ public class Campo extends JPanel{
             return false;
         
         this.hasCharacter = true;
-        
         personagens.add(e);
-        add(e);
-        add(new JLabel(new ImageIcon("WppIcone.png")));
-        
-        
+        if (visivel)
+            add(e);
+
         repaint();
         return true;
     }
@@ -88,7 +90,11 @@ public class Campo extends JPanel{
     
     public void deixaVisível (){
         setBackground(Color.LIGHT_GRAY);
-        setSize(15,15);
+        repaint();
+        visivel = true;
+        c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.CENTER;
+        c.fill = GridBagConstraints.BOTH;
         
         
         if (hasTrap)    this.add    ( new JLabel ("Poço")   );
@@ -96,7 +102,7 @@ public class Campo extends JPanel{
         if (hasShine)   this.add    ( new JLabel ("Brilho") );
         if (isStinky)   this.add    ( new JLabel ("Fedor")  );
         
-        repaint();
+        
     }
     
     

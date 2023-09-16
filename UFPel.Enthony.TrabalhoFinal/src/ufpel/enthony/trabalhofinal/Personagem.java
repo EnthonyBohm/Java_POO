@@ -1,6 +1,8 @@
 
 package ufpel.enthony.trabalhofinal;
 
+import java.awt.Font;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -16,8 +18,8 @@ public abstract class Personagem extends JLabel{
         vida = 100;
         this.classe = classe;
         setText(classe);
-        setIcon(icone);
         setVisible(true);
+        setFont(new Font("Comic Sans MS", 0, 12));
     }
     
     public void aleatorizaPosicao(){
@@ -28,7 +30,9 @@ public abstract class Personagem extends JLabel{
         this.mapa = mapa.getCampo();
         Campo pAtual, pProx;
         pAtual = this.mapa[position.getX()][position.getY()];
-        position.moveDireita();
+        
+        if (position.moveDireita() == false)
+            return false;
         pProx = this.mapa[position.getX()][position.getY()];
         if (pProx.HasTrap()){
             position.moveEsquerda();
@@ -37,6 +41,7 @@ public abstract class Personagem extends JLabel{
         
         pAtual.removePersonagem(this);
         pAtual.repaint();
+        pProx.deixaVisível();
         pProx.AdicionaPersonagem(this);
         pAtual.repaint();
 
@@ -47,7 +52,7 @@ public abstract class Personagem extends JLabel{
         this.mapa = mapa.getCampo();
         Campo pAtual, pProx;
         pAtual = this.mapa[position.getX()][position.getY()];
-        position.moveAbaixo();
+        if (position.moveAbaixo() == false ) return false;
         pProx = this.mapa[position.getX()][position.getY()];
         if (pProx.HasTrap()){
             position.moveAcima();
@@ -56,6 +61,7 @@ public abstract class Personagem extends JLabel{
         
         pAtual.removePersonagem(this);
         pAtual.repaint();
+        pProx.deixaVisível();
         pProx.AdicionaPersonagem(this);
         pAtual.repaint();
 
@@ -77,6 +83,7 @@ public abstract class Personagem extends JLabel{
 
         pAtual.removePersonagem(this);
         pAtual.repaint();
+        pProx.deixaVisível();
         pProx.AdicionaPersonagem(this);
         pAtual.repaint();
 
@@ -97,6 +104,7 @@ public abstract class Personagem extends JLabel{
         
         pAtual.removePersonagem(this);
         pAtual.repaint();
+        pProx.deixaVisível();
         pProx.AdicionaPersonagem(this);
         pAtual.repaint();
 
@@ -108,6 +116,9 @@ public abstract class Personagem extends JLabel{
     }
     public boolean mesmoBloco (Objeto e){
         return this.getPosition().equals(e.getPosition());
+    }
+    public boolean mesmoBloco(Buraco e){
+        return position.equals(e.getPosition());
     }
 
 

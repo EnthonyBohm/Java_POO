@@ -20,13 +20,13 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
     private     Agente      agente;
     private     Wumpus      wumpus;
     private     NovoMonstro monstro;
-    private     JButton     andaCima, andaBaixo, andaEsq, andaDir;
+    private     JButton     andaCima, andaBaixo, andaEsq, andaDir, debug;
         
     public void abreJanela() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         setResizable(false);
-        setPreferredSize(new Dimension (1000,800));
+        setPreferredSize(new Dimension (1920,1080));
         
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -41,18 +41,18 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 1.0;
-        c.weighty = 0.60;
+        c.weighty = 1;
         add(mapa, c);
         
         // Definição do Painel inferior
         JPanel pInferior = new JPanel();
-        pInferior.setBackground(Color.red);
+        pInferior.setBackground(Color.BLUE);
         c.fill = GridBagConstraints.BOTH;
         c.gridheight = 1;
         c.gridx = 0;
         c.gridy = 1;
         c.weightx = 1.0;
-        c.weighty = 0.40;
+        c.weighty = 0.1;
         
         //Definição dos Botões de Movimentação
         agente = mapa.getAgente();
@@ -75,10 +75,15 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
         andaDir = new JButton("Direita");
         andaDir.addActionListener(this::direita);
         botoes.add(andaDir, BorderLayout.EAST);
+        // Botão de Debug
+        debug = new JButton("DEBUG");
+        debug.addActionListener(this::debug);
 
+        //Adiciona Botões ao painel inferior
         pInferior.add(botoes);
+        pInferior.add(debug);
         
-
+        //Adiciona Painel Inferior ao Frame
         add(pInferior, c);
         
         setVisible(true);
@@ -106,6 +111,9 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
         agente.movimentaDireita(mapa);
         turnoMonstros();
     }
+    private void debug(ActionEvent actionevent1) {
+        mapa.revelaMapa();
+    }   
 
     public void turnoMonstros(){
         // wumpus.movimenta(mapa);
@@ -125,5 +133,7 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
         janela.abreJanela();
 
                 
-    }    
+    }
+
+     
 }

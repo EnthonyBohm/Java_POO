@@ -21,45 +21,35 @@ public class Posicao {
     }
     
     public boolean moveAcima () {
-        try {
+        if (getY() == 0)
+            return false;
+        else{
             posicao[1] -= 1;
             return true;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return false;
-        }
-        
+        }    
     }
     public boolean moveAbaixo () {
-        try {
-            posicao[1] += 1;
-            return true;
-        } catch (ArrayIndexOutOfBoundsException e) {
+        if (getY() == 14)
             return false;
-        }
+
+        posicao[1] += 1;
+        return true;
     }
     public boolean moveDireita () {
-        try {
-            posicao[0] += 1;   
-            return true;
-        } catch (ArrayIndexOutOfBoundsException e) {
+        if (getX() == 14)
             return false;
-        }
+
+        posicao[0] += 1;   
+        return true;
     }
     public boolean moveEsquerda () {
-        try {
-            posicao[0] -= 1;
-            return true;
-        } catch (ArrayIndexOutOfBoundsException e) {
+        if (getY() == 0)
             return false;
-        }
+        posicao[0] -= 1;
+        return true;
     }
 
-    // public boolean mesmoBloco( Personagem o){
-    //     return e.getPosition().equals(o.getPosition());
-    // }
-    // public boolean mesmoBloco(Objeto o){
-    //     return this.getPosition().equals(o.getPosition());
-    // }
+
     
     
     //Métodos Especiais

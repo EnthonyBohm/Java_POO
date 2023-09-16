@@ -1,18 +1,21 @@
 package ufpel.enthony.trabalhofinal;
 
+import java.awt.Font;
+
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  * @author entho
  */
-public class Buraco extends JPanel {
+public class Buraco extends JLabel {
     Posicao position;
     
     
     public Buraco () {
-        this.add (new JLabel ("Poço"));
+        
         this.setVisible(true);
+        setText("Poço");
+        setFont(new Font("Comic Sans MS", 0, 12));
         position = new Posicao();
     }
 

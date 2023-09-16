@@ -33,5 +33,7 @@ public class Objeto extends JLabel{
     public boolean mesmoBloco (Objeto e){
         return this.getPosition().equals(e.getPosition());
     }
-    
+    public boolean mesmoBloco(Buraco e){
+        return position.equals(e.getPosition());
+    }
 }

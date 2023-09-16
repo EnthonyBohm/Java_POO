@@ -18,10 +18,11 @@ public class  Mapa extends JPanel{
         public void  inicializaMapa (){
         personagens = new Personagem[]{new Agente(), new Wumpus(), new NovoMonstro()};
         objetos = new Objeto[]{new Madeira(), new Madeira()};
-        buracos = new Buraco[]{new Buraco ()/* , new Buraco(), new Buraco(), new Buraco(), new Buraco()*/};
+        buracos = new Buraco[]{new Buraco () , new Buraco(), new Buraco(), new Buraco(), new Buraco()};
         campo = new Campo[15][15];
         Campo pAtual;
         c       = new GridBagConstraints();
+        Agente agente  = getAgente();
         
         setLayout(new GridBagLayout());
         setVisible(true);
@@ -30,17 +31,21 @@ public class  Mapa extends JPanel{
             for(int j = 0; j < 15; j++){
                 c.gridx = i;
                 c.gridy = j;
-                c.weightx = 1;
-                c.weighty = 1;
+                c.weightx = 10;
+                c.weighty = 10;
                 c.fill = GridBagConstraints.BOTH;
                 c.insets = new Insets(0,1,1,1);
                 pAtual = campo[i][j] = new Campo(i, j);
                         
                 
-                for (Personagem perso: personagens){
-                    if (perso.getPosition().equals(pAtual.getPosition())){
-                        pAtual.AdicionaPersonagem(perso);
-                    }
+                if(pAtual.getPosition().equals(agente.getPosition())){
+                    pAtual.deixaVisível();
+                    add(agente);
+                }
+
+                for (Buraco buraco: buracos){
+                    if (buraco.getPosition().equals(pAtual.getPosition()))
+                        pAtual.add(buraco);
                 }
                 
                 add(pAtual, c);
@@ -81,7 +86,7 @@ public class  Mapa extends JPanel{
         public void revelaMapa()  {
             for (int i = 0; i < 15; i++){
                 for (int j = 0; j < 15; j++){
-                    campo[i][j].deixaVisível();
+                    //
                 }
             }
         }
