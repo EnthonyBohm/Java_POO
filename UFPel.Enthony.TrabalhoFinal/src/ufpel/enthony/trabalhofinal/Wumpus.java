@@ -17,7 +17,6 @@ public class Wumpus extends Personagem {
     public Wumpus () {
         super("Wumpus", new ImageIcon ("IconeMonstro.png"));
         rand = new Random();
-        
         super.aleatorizaPosicao();
     }
 

@@ -11,8 +11,10 @@ public class Posicao {
     
     public Posicao () {
         posicao = new int[2];
+        do {
         posicao[0] = rand.nextInt(15);
         posicao[1] = rand.nextInt(15);
+        } while (posicao[0] == 0 && posicao[1] == 0);
     }
     public Posicao (int x, int y){
         posicao = new int[2];
@@ -43,7 +45,7 @@ public class Posicao {
         return true;
     }
     public boolean moveEsquerda () {
-        if (getY() == 0)
+        if (getX() == 0)
             return false;
         posicao[0] -= 1;
         return true;

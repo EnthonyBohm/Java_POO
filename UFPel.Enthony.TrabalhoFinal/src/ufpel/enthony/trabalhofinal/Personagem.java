@@ -41,9 +41,11 @@ public abstract class Personagem extends JLabel{
         
         pAtual.removePersonagem(this);
         pAtual.repaint();
-        pProx.deixaVisível();
-        pProx.AdicionaPersonagem(this);
-        pAtual.repaint();
+        pProx.adicionaPersonagem(this);
+        if (!(pProx.isVisivel()))  
+            pProx.deixaVisível();
+        
+        
 
         return true;
     }
@@ -52,7 +54,8 @@ public abstract class Personagem extends JLabel{
         this.mapa = mapa.getCampo();
         Campo pAtual, pProx;
         pAtual = this.mapa[position.getX()][position.getY()];
-        if (position.moveAbaixo() == false ) return false;
+        if (position.moveAbaixo() == false )
+            return false;
         pProx = this.mapa[position.getX()][position.getY()];
         if (pProx.HasTrap()){
             position.moveAcima();
@@ -61,9 +64,10 @@ public abstract class Personagem extends JLabel{
         
         pAtual.removePersonagem(this);
         pAtual.repaint();
-        pProx.deixaVisível();
-        pProx.AdicionaPersonagem(this);
-        pAtual.repaint();
+        if (!(pProx.isVisivel()))  
+            pProx.deixaVisível();
+        pProx.adicionaPersonagem(this);
+        
 
         return true;
     }
@@ -73,7 +77,8 @@ public abstract class Personagem extends JLabel{
         
         this.mapa = mapa.getCampo();
         pAtual = this.mapa[position.getX()][position.getY()];
-        if (position.moveEsquerda() == false) return false;    
+        if (position.moveEsquerda() == false)
+            return false;    
         pProx = this.mapa[position.getX()][position.getY()];
 
         if (pProx.HasTrap()){
@@ -83,9 +88,10 @@ public abstract class Personagem extends JLabel{
 
         pAtual.removePersonagem(this);
         pAtual.repaint();
-        pProx.deixaVisível();
-        pProx.AdicionaPersonagem(this);
-        pAtual.repaint();
+        if (!(pProx.isVisivel()))  
+            pProx.deixaVisível();
+        pProx.adicionaPersonagem(this);
+        
 
 
         return true;
@@ -95,7 +101,9 @@ public abstract class Personagem extends JLabel{
         this.mapa = mapa.getCampo();
         Campo pAtual, pProx;
         pAtual = this.mapa[position.getX()][position.getY()];
-        position.moveAcima();
+
+        if (position.moveAcima() == false) 
+            return false;
         pProx = this.mapa[position.getX()][position.getY()];
         if (pProx.HasTrap()){
             position.moveAbaixo();
@@ -104,9 +112,10 @@ public abstract class Personagem extends JLabel{
         
         pAtual.removePersonagem(this);
         pAtual.repaint();
-        pProx.deixaVisível();
-        pProx.AdicionaPersonagem(this);
-        pAtual.repaint();
+        if (!(pProx.isVisivel()))  
+            pProx.deixaVisível();
+        pProx.adicionaPersonagem(this);
+
 
         return true;
     }

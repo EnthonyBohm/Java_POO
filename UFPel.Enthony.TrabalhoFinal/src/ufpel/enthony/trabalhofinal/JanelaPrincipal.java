@@ -98,25 +98,29 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         agente.movimentaAcima(mapa);
         turnoMonstros();
+        mapa.repaint();
     }
     private void esquerda(ActionEvent actionevent1) {
         agente.movimentaEsquerda(mapa);
         turnoMonstros();
+        mapa.repaint();
     }
     private void baixo(ActionEvent actionevent1) {
         agente.movimentaAbaixo(mapa);
         turnoMonstros();
+        mapa.repaint();
     }
     private void direita(ActionEvent actionevent1) {
         agente.movimentaDireita(mapa);
         turnoMonstros();
+        mapa.repaint();
     }
     private void debug(ActionEvent actionevent1) {
         mapa.revelaMapa();
     }   
 
     public void turnoMonstros(){
-        // wumpus.movimenta(mapa);
+        wumpus.movimenta(mapa);
         if(wumpus.mesmoBloco(agente)){
             wumpus.ataca(agente);
             System.out.println("GRAW");

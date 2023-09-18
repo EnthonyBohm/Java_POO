@@ -1,14 +1,13 @@
 package ufpel.enthony.trabalhofinal;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -23,6 +22,7 @@ public class Campo extends JPanel{
     private     boolean             hasItem, hasCharacter, hasTrap;
     private     boolean             isStinky, hasBreeze, hasShine;
     private     GridBagConstraints  c;
+    private     Buraco              poco;
     
     public Campo (int x, int y) {
         setVisible(true);
@@ -33,6 +33,7 @@ public class Campo extends JPanel{
         setPreferredSize(new Dimension(20, 20));
         setLayout(new GridBagLayout());
         setBackground(Color.DARK_GRAY);
+        
         
         
         
@@ -69,16 +70,24 @@ public class Campo extends JPanel{
         return null;
     }
     
-    public boolean AdicionaPersonagem (Personagem e) {
+    public boolean adicionaPersonagem (Personagem e) {
         if (hasTrap)
             return false;
         
         this.hasCharacter = true;
         personagens.add(e);
-        if (visivel)
-            add(e);
 
-        repaint();
+        if (e.getClass().equals(Agente.class)){
+            add(e,c);
+        }else {
+            if (visivel){
+            c.anchor = GridBagConstraints.SOUTH;
+            add(e,c);
+            }
+        }
+        
+            
+
         return true;
     }
     public void removePersonagem (Personagem e) {
@@ -87,21 +96,47 @@ public class Campo extends JPanel{
         personagens.remove(e);
     }
     
+    public void adicionaPoco (Buraco e){
+        hasTrap = true;
+        add(e);
+        poco = e;
+    }
+    public void tapaBuraco (Buraco e){
+        hasTrap = false;
+        remove(poco);
+    }
+    public Buraco getBuraco  (){
+        return poco;
+    }
+
     
     public void deixaVisível (){
         setBackground(Color.LIGHT_GRAY);
-        repaint();
         visivel = true;
         c = new GridBagConstraints();
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.BOTH;
+        add(new JLabel("Azul"));
         
+        if (hasCharacter) {
+            for(Personagem p: personagens){
+                if (p.getPosition().equals(position))
+                    adicionaPersonagem(p);  
+            }
+        }
+        repaint();
         
-        if (hasTrap)    this.add    ( new JLabel ("Poço")   );
-        if (hasBreeze)  this.add    ( new JLabel ("Briza")  );
-        if (hasShine)   this.add    ( new JLabel ("Brilho") );
-        if (isStinky)   this.add    ( new JLabel ("Fedor")  );
-        
+        if (hasTrap){
+            setBackground(Color.BLACK);
+            add( new JLabel ("Poço"), c);
+        }    
+        if (hasBreeze){
+            JLabel label = new JLabel("Brisa");
+            label.setFont(new Font("Comic Sans MS", 0, 12));
+            System.out.println("Você sente uma Briza");
+        }  
+        if (hasShine)   add    ( new JLabel ("Brilho") );
+        if (isStinky)   add    ( new JLabel ("Fedor")  );
         
     }
     

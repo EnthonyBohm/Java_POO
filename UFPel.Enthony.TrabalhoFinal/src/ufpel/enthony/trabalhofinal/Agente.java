@@ -2,6 +2,7 @@
 package ufpel.enthony.trabalhofinal;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
@@ -10,15 +11,17 @@ public class Agente extends Personagem{
 //    int pv 
 //    boolean visivel 
 //    Posicao position
-    
+    ArrayList<Objeto>   objetos;
+    int                 bateriaLanterna;
     ImageIcon icone;
     
     public Agente(){
         super("Agente", new ImageIcon ("IconeAgente.png"));
         super.setPosition(new Posicao(0, 0));
-        setSize(10,10);
-        setBackground(Color.BLACK);
-        
+
+        bateriaLanterna = 100;
+        objetos = new ArrayList<>();
+
         setVisible(true);
     }
 
