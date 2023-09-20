@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  * @author entho
@@ -59,19 +60,19 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
         wumpus = mapa.getWumpus();
         monstro = mapa.getNovoMonstro();
         JPanel botoes = new JPanel(new BorderLayout());
-
+        // Movimento Cima
         andaCima = new JButton("Cima");
         andaCima.addActionListener(this);
         botoes.add(andaCima, BorderLayout.NORTH);
-
+        // movimento baixo
         andaBaixo = new JButton("Baixo");
         andaBaixo.addActionListener(this::baixo);
         botoes.add(andaBaixo, BorderLayout.SOUTH);
-
+        // movimento Esquerda
         andaEsq = new JButton("Esquerda");
         andaEsq.addActionListener(this::esquerda);
         botoes.add(andaEsq, BorderLayout.WEST);
-
+        // movimento Direita
         andaDir = new JButton("Direita");
         andaDir.addActionListener(this::direita);
         botoes.add(andaDir, BorderLayout.EAST);
@@ -96,24 +97,67 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        agente.movimentaAcima(mapa);
-        turnoMonstros();
-        mapa.repaint();
+        
+        SwingUtilities.invokeLater(new Runnable() {
+           @Override
+           public void run (){
+                agente.movimentaAcima(mapa);
+                turnoMonstros();
+                mapa.repaint();
+                if( !isAlive(agente)){
+                    System.out.println("Você Morreu");
+                    dispose();
+                }
+            } 
+        });
+        
     }
     private void esquerda(ActionEvent actionevent1) {
-        agente.movimentaEsquerda(mapa);
-        turnoMonstros();
-        mapa.repaint();
+        SwingUtilities.invokeLater(new Runnable() {
+           @Override
+           public void run (){
+                agente.movimentaEsquerda(mapa);
+                turnoMonstros();
+                mapa.repaint();
+                if( !isAlive(agente)){
+                    System.out.println("Você Morreu");
+                    dispose();
+                }
+           } 
+        });   
     }
+
     private void baixo(ActionEvent actionevent1) {
-        agente.movimentaAbaixo(mapa);
-        turnoMonstros();
-        mapa.repaint();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run (){
+            agente.movimentaAbaixo(mapa);
+            turnoMonstros();
+            mapa.repaint();
+            if( !isAlive(agente)){
+                System.out.println("Você Morreu");
+                dispose();
+            }
+        } 
+    });
+        
+        
     }
     private void direita(ActionEvent actionevent1) {
-        agente.movimentaDireita(mapa);
-        turnoMonstros();
-        mapa.repaint();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run (){
+                agente.movimentaDireita(mapa);
+                turnoMonstros();
+                mapa.repaint();
+                if( !isAlive(agente)){
+                    System.out.println("Você Morreu");
+                    dispose();
+                }
+            } 
+        });
+        
+        
     }
     private void debug(ActionEvent actionevent1) {
         mapa.revelaMapa();
@@ -128,14 +172,26 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
             this.dispose();
         }
             
-        // monstro.movimenta(mapa);
+        monstro.movimenta(mapa);
+        if(monstro.mesmoBloco(agente));
     }
 
+    public boolean isAlive (Personagem e){
+        if (e.getVida() == 0){
+            return false;
+        }
+        return true;
+    }
 
     public static void main(String[] args) {
         JanelaPrincipal janela = new JanelaPrincipal();
-        janela.abreJanela();
 
+        SwingUtilities.invokeLater(new Runnable(){
+            @Override
+            public void run() {
+                janela.abreJanela();
+            }
+        });
                 
     }
 

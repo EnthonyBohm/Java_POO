@@ -2,30 +2,52 @@
 package ufpel.enthony.trabalhofinal;
 
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-public abstract class Personagem extends JLabel{
-    protected     int         vida;
-    protected     boolean     visivel;
-    protected     Posicao     position;
-    protected     String      classe;
-    protected     Campo[][]   mapa;
+public abstract class Personagem extends JPanel{
+    protected       int                 vida;
+    protected       boolean             visivel;
+    protected       Posicao             position;
+    protected       String              classe;
+    protected       Campo[][]           mapa;
+    protected       JLabel              texto;
+    protected       GridBagConstraints  c;
     
     //Métodos Especiais
     public Personagem(String classe, ImageIcon icone) {
+        position = new Posicao();
         vida = 100;
         this.classe = classe;
-        setText(classe);
+        c = new GridBagConstraints();
+
+        /* Métodos substituidos pelo Ícone
+        // texto = new JLabel(classe);
+        // texto.setFont(new Font("Comic Sans Ms", 0, 12));
+        // add(texto);
+         */
+
+        //Definição do Layout
+        setLayout(new GridBagLayout());
+        setBackground(null);
+        
+        //Redimensionamento da Imagem
+        Image imagem = icone.getImage();
+        Image newImage = imagem.getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+        icone = new ImageIcon(newImage);
+        add (new JLabel(icone), c);
+
+        //Painel definido como Visível (Painel = Campo)
         setVisible(true);
-        setFont(new Font("Comic Sans MS", 0, 12));
-    }
-    
-    public void aleatorizaPosicao(){
-        position = new Posicao();
     }
 
+
+    //Métodos Referentes à movimentação do Personagem
     public boolean movimentaDireita (Mapa mapa){
         this.mapa = mapa.getCampo();
         Campo pAtual, pProx;
@@ -39,17 +61,10 @@ public abstract class Personagem extends JLabel{
             return false;
         }
         
-        pAtual.removePersonagem(this);
-        pAtual.repaint();
-        pProx.adicionaPersonagem(this);
-        if (!(pProx.isVisivel()))  
-            pProx.deixaVisível();
-        
-        
+        atualizaPosicoes(mapa, pAtual, pProx);
 
         return true;
     }
-
     public boolean movimentaAbaixo (Mapa mapa){
         this.mapa = mapa.getCampo();
         Campo pAtual, pProx;
@@ -62,16 +77,10 @@ public abstract class Personagem extends JLabel{
             return false;
         }
         
-        pAtual.removePersonagem(this);
-        pAtual.repaint();
-        if (!(pProx.isVisivel()))  
-            pProx.deixaVisível();
-        pProx.adicionaPersonagem(this);
-        
+       atualizaPosicoes(mapa, pAtual, pProx);
 
         return true;
     }
-
     public boolean movimentaEsquerda (Mapa mapa){
         Campo pAtual, pProx;
         
@@ -86,40 +95,45 @@ public abstract class Personagem extends JLabel{
             return false;
         }
 
-        pAtual.removePersonagem(this);
-        pAtual.repaint();
-        if (!(pProx.isVisivel()))  
-            pProx.deixaVisível();
-        pProx.adicionaPersonagem(this);
-        
+        atualizaPosicoes(mapa, pAtual, pProx);
 
 
         return true;
     }
-
     public boolean movimentaAcima (Mapa mapa){
-        this.mapa = mapa.getCampo();
+        Campo[][] map = mapa.getCampo();
         Campo pAtual, pProx;
-        pAtual = this.mapa[position.getX()][position.getY()];
+        pAtual = map[position.getX()][position.getY()];
 
         if (position.moveAcima() == false) 
             return false;
-        pProx = this.mapa[position.getX()][position.getY()];
+        pProx = mapa.getCampo()[position.getX()][position.getY()];
         if (pProx.HasTrap()){
             position.moveAbaixo();
             return false;
         }
         
-        pAtual.removePersonagem(this);
-        pAtual.repaint();
-        if (!(pProx.isVisivel()))  
-            pProx.deixaVisível();
-        pProx.adicionaPersonagem(this);
-
+        atualizaPosicoes(mapa, pAtual, pProx);
 
         return true;
     }
 
+    public void atualizaPosicoes(Mapa map, Campo pAtual, Campo pProx){
+        pAtual.removePersonagem(this);
+        pAtual.repaint();
+
+        if (  ((pProx.isVisivel() == false) ) && ( this.getClass().equals(Agente.class) )  )
+            pProx.deixaVisível();
+        if ( getClass().equals(Wumpus.class))
+            map.getWumpus().emanarFedor(map.getCampo(), position);
+            
+        pProx.adicionaPersonagem(this);
+        pProx.repaint();
+        
+    }
+
+
+    //Métodos Referentes a posição do Personagem e outros Personagens/Objetos
     public boolean mesmoBloco (Personagem e){
         return this.getPosition().equals(e.getPosition());
     }

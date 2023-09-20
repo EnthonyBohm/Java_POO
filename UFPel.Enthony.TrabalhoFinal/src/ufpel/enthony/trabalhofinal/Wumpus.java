@@ -10,14 +10,14 @@ public class Wumpus extends Personagem {
     //    boolean visivel 
     //    Posicao position
     
-    Random rand;
+    //Variáveis para movimentação do personagem
+    Random randDirection;
     int movimento;
-    ImageIcon icone;
     
     public Wumpus () {
-        super("Wumpus", new ImageIcon ("IconeMonstro.png"));
-        rand = new Random();
-        super.aleatorizaPosicao();
+        super("Wumpus", new ImageIcon ("C:\\Users\\entho\\OneDrive\\Documentos\\GitHub\\Java_POO\\UFPel.Enthony.TrabalhoFinal\\src\\ufpel\\enthony\\trabalhofinal\\IconeMonstro.png"));
+        randDirection = new Random();
+        setVisible(false);
     }
 
     public void ataca (Agente e){
@@ -28,22 +28,21 @@ public class Wumpus extends Personagem {
         boolean done = false;
         while (!done){
             try {
-            movimento = rand.nextInt(0, 5);
+            movimento = randDirection.nextInt(1, 5);
             switch (movimento){
                 case 1:
-                    movimentaDireita(mapa);
+                    done = movimentaDireita(mapa);
                     break;
                 case 2:
-                    movimentaEsquerda(mapa);
+                    done = movimentaEsquerda(mapa);
                     break;
                 case 3:
-                    movimentaAcima(mapa);
+                    done = movimentaAcima(mapa);
                     break;
                 case 4:
-                    movimentaAbaixo(mapa);
+                    done = movimentaAbaixo(mapa);
                     break;
             }
-            done = true;
         } catch (ImpossibleToPassTrapException e){
             continue;
         } catch(ArrayIndexOutOfBoundsException e){
@@ -51,7 +50,20 @@ public class Wumpus extends Personagem {
         }
         
         }
-        
 
+    }
+
+    public void emanarFedor (Campo[][] mapa, Posicao pAtual){
+        int x,y;
+        x = pAtual.getX();
+        y = pAtual.getY();
+        if (pAtual.moveEsquerda())
+            mapa[x-1][y].setIsStinky(true);
+        if (pAtual.moveDireita())
+            mapa[x+1][y].setIsStinky(true);
+        if (pAtual.moveAcima() )
+            mapa[x][y+1].setIsStinky(true);
+        if (pAtual.moveAbaixo() )
+            mapa[x][y-1].setIsStinky(true);
     }
 }

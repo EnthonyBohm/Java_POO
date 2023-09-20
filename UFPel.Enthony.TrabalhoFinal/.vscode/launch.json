@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "JanelaPrincipal",
+      "request": "launch",
+      "mainClass": "ufpel.enthony.trabalhofinal.JanelaPrincipal",
+      "projectName": "UFPel.Enthony.TrabalhoFinal_a3957e7b"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/entho/OneDrive/Documentos/GitHub/Java_POO/UFPel.Enthony.TrabalhoFinal",
+      "program": "c:/Users/entho/OneDrive/Documentos/GitHub/Java_POO/UFPel.Enthony.TrabalhoFinal/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

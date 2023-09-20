@@ -65,6 +65,7 @@ public class Posicao {
         return posicao[1];
     }
     
+    
     @Override
     public boolean equals(Object e){
         return (this.getX() == ((Posicao)e).getX()) 

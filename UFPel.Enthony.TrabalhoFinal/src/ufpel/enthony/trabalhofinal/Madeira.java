@@ -9,9 +9,4 @@ public class Madeira extends Objeto {
         super("Madeira");
     }
     
-    
-    @Override
-    public String toString() {
-        return "Madeira";
-    }
 }

@@ -23,17 +23,20 @@ public class Campo extends JPanel{
     private     boolean             isStinky, hasBreeze, hasShine;
     private     GridBagConstraints  c;
     private     Buraco              poco;
+    private     JPanel              painel;
+    private     JLabel              fedor, brisa, brilho;
     
     public Campo (int x, int y) {
         setVisible(true);
         c = new GridBagConstraints();
-        c.fill = GridBagConstraints.BOTH;
-        c.weightx = 1;
-        c.weighty = 1;
-        setPreferredSize(new Dimension(20, 20));
+        
+        setPreferredSize(new Dimension(0, 0));
         setLayout(new GridBagLayout());
         setBackground(Color.DARK_GRAY);
-        
+        painel = new JPanel();
+        painel.setVisible(true);
+        add(painel);
+        painel.setBackground(null);
         
         
         
@@ -54,16 +57,20 @@ public class Campo extends JPanel{
         if (hasTrap)
             return false;
         
-        this.hasItem = true;
+        hasItem = true;
         itens.add(o);
-        this.add(o);
-        repaint();
+        c.weightx=1;
+        c.anchor = GridBagConstraints.SOUTH;
+        painel.add(o, c);
+
         return true;
     }
     public Objeto pegaItem (String nome){
         for (Objeto item: itens){
             if (item.getTipo().equals(nome)){
                 if (itens.size() == 1) hasItem = false;
+                painel.remove(item);
+                itens.remove(item);
                 return item;
             }
         }
@@ -74,32 +81,34 @@ public class Campo extends JPanel{
         if (hasTrap)
             return false;
         
-        this.hasCharacter = true;
+        hasCharacter = true;
         personagens.add(e);
 
         if (e.getClass().equals(Agente.class)){
-            add(e,c);
+            painel.add(e,c);
         }else {
-            if (visivel){
-            c.anchor = GridBagConstraints.SOUTH;
-            add(e,c);
-            }
-        }
-        
-            
-
-        return true;
+            painel.add(e,c);
+            if (visivel) e.setVisible(true);    
+        }   
+        add(painel);
+        repaint();
+        return true;   
     }
     public void removePersonagem (Personagem e) {
         if (this.personagens.size() == 1)
             this.hasCharacter = false;
         personagens.remove(e);
+        painel.remove(e);
+        repaint();
     }
     
     public void adicionaPoco (Buraco e){
         hasTrap = true;
-        add(e);
+        painel.add(e);
+        repaint();
         poco = e;
+    
+        poco.setVisible(true);
     }
     public void tapaBuraco (Buraco e){
         hasTrap = false;
@@ -111,33 +120,44 @@ public class Campo extends JPanel{
 
     
     public void deixaVisível (){
+        // Define a cor da posição Visível como Cinza
         setBackground(Color.LIGHT_GRAY);
         visivel = true;
-        c = new GridBagConstraints();
-        c.anchor = GridBagConstraints.CENTER;
-        c.fill = GridBagConstraints.BOTH;
-        add(new JLabel("Azul"));
+        // Define as restrições da adição
         
+        //Adiciona os Personagens que estavam no Quadro mas não estavam Visíveis
         if (hasCharacter) {
             for(Personagem p: personagens){
                 if (p.getPosition().equals(position))
-                    adicionaPersonagem(p);  
+                    painel.add(p);
+                    repaint();
             }
         }
-        repaint();
         
+        
+        //Coloca o poço como um buraco escuro
         if (hasTrap){
             setBackground(Color.BLACK);
-            add( new JLabel ("Poço"), c);
-        }    
+            poco.setVisible(true);
+            poco.getLabel().setVisible(true);
+        }
+
+        //Adiciona Mensagem de brisa
         if (hasBreeze){
-            JLabel label = new JLabel("Brisa");
-            label.setFont(new Font("Comic Sans MS", 0, 12));
-            System.out.println("Você sente uma Briza");
+            brisa = new JLabel("Brisa");
+            brisa.setFont(new Font("Comic Sans MS", 0, 12));
+            painel.add(brisa);
         }  
-        if (hasShine)   add    ( new JLabel ("Brilho") );
-        if (isStinky)   add    ( new JLabel ("Fedor")  );
-        
+
+        if (hasShine) {
+            brilho = new JLabel("Brilho");
+        }
+        if (isStinky) {
+            fedor = new JLabel("Fedor");
+            fedor.setFont(new Font("Comic Sans MS", 0, 12));
+            painel.add(fedor);
+        }
+        repaint();
     }
     
     

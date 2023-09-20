@@ -9,11 +9,11 @@ import javax.swing.JPanel;
  * @author entho
  */
 public class  Mapa extends JPanel{
-        Campo[][] campo;
-        Objeto[] objetos;
-        Buraco[] buracos;
-        Personagem[] personagens;
-        GridBagConstraints c;
+        private     Campo[][]           campo;
+        private     Objeto[]            objetos;
+        private     Buraco[]            buracos;
+        private     Personagem[]        personagens;
+        private     GridBagConstraints  c;
 
         public void  inicializaMapa (){
         //Inicializa o Mapa e todos Recursos que vão ser usados no jogo
@@ -35,8 +35,8 @@ public class  Mapa extends JPanel{
                 //Define as características de cada campo do Mapa
                 c.gridx = i;
                 c.gridy = j;
-                c.weightx = 10;
-                c.weighty = 10;
+                c.weightx = 20;
+                c.weighty = 60;
                 c.fill = GridBagConstraints.BOTH;
                 c.insets = new Insets(0,1,1,1);
                 pAtual = campo[i][j] = new Campo(i, j);
