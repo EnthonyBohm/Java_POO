@@ -51,7 +51,9 @@ public class Posicao {
         return true;
     }
 
-
+    public boolean samePosition(Posicao p){
+        return this.equals(p);
+    }
     
     
     //Métodos Especiais

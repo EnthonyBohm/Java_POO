@@ -17,7 +17,8 @@ public class Objeto extends JPanel{
     
     public Objeto (String nome){
         tipo = nome;
-        texto = new JLabel(nome);
+        texto = new JLabel(nome, 2);
+        texto.setVerticalAlignment(3);
         texto.setFont(new Font("Comic Sans MS", 0, 12));
         add(texto);
 
@@ -35,15 +36,5 @@ public class Objeto extends JPanel{
     } 
     public String getTipo() {
         return tipo;
-    }
-    
-    public boolean mesmoBloco (Personagem e){
-        return this.getPosition().equals(e.getPosition());
-    }
-    public boolean mesmoBloco (Objeto e){
-        return this.getPosition().equals(e.getPosition());
-    }
-    public boolean mesmoBloco(Buraco e){
-        return position.equals(e.getPosition());
     }
 }

@@ -1,7 +1,6 @@
 
 package ufpel.enthony.trabalhofinal;
 
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -21,16 +20,11 @@ public abstract class Personagem extends JPanel{
     
     //Métodos Especiais
     public Personagem(String classe, ImageIcon icone) {
-        position = new Posicao();
-        vida = 100;
-        this.classe = classe;
-        c = new GridBagConstraints();
-
-        /* Métodos substituidos pelo Ícone
-        // texto = new JLabel(classe);
-        // texto.setFont(new Font("Comic Sans Ms", 0, 12));
-        // add(texto);
-         */
+        c           =   new GridBagConstraints();
+        position    =   new Posicao();
+        vida        =   100;
+        this.classe =   classe;
+        
 
         //Definição do Layout
         setLayout(new GridBagLayout());
@@ -48,11 +42,12 @@ public abstract class Personagem extends JPanel{
 
 
     //Métodos Referentes à movimentação do Personagem
-    public boolean movimentaDireita (Mapa mapa){
-        this.mapa = mapa.getCampo();
+    public boolean movimentaDireita (Mapa map){
+        this.mapa = map.getCampo();
         Campo pAtual, pProx;
         pAtual = this.mapa[position.getX()][position.getY()];
         
+        // Testa para ver se a próxima posição não esta fora do limite e nem tem um poço
         if (position.moveDireita() == false)
             return false;
         pProx = this.mapa[position.getX()][position.getY()];
@@ -61,7 +56,7 @@ public abstract class Personagem extends JPanel{
             return false;
         }
         
-        atualizaPosicoes(mapa, pAtual, pProx);
+        atualizaPosicoes(map, pAtual, pProx);
 
         return true;
     }
@@ -120,15 +115,14 @@ public abstract class Personagem extends JPanel{
 
     public void atualizaPosicoes(Mapa map, Campo pAtual, Campo pProx){
         pAtual.removePersonagem(this);
-        pAtual.repaint();
 
-        if (  ((pProx.isVisivel() == false) ) && ( this.getClass().equals(Agente.class) )  )
+
+        if (  ((pProx.isVisivel() == false) ) && ( this instanceof Agente )  )
             pProx.deixaVisível();
-        if ( getClass().equals(Wumpus.class))
-            map.getWumpus().emanarFedor(map.getCampo(), position);
+        // if ( this instanceof Wumpus || this instanceof NovoMonstro)
+        //     map.getWumpus().emanarFedor(map.getCampo(), position);
             
         pProx.adicionaPersonagem(this);
-        pProx.repaint();
         
     }
 

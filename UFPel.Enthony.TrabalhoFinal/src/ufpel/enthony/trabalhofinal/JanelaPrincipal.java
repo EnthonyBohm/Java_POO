@@ -16,27 +16,29 @@ import javax.swing.SwingUtilities;
 /**
  * @author entho
  */
+
+
 public class JanelaPrincipal extends JFrame implements ActionListener{
-    private     Mapa        mapa;
-    private     Agente      agente;
-    private     Wumpus      wumpus;
-    private     NovoMonstro monstro;
-    private     JButton     andaCima, andaBaixo, andaEsq, andaDir, debug;
-        
-    public void abreJanela() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    private     Mapa                mapa;
+    private     Agente              agente;
+    private     Wumpus              wumpus;
+    private     NovoMonstro         monstro;
+    private     JButton             andaCima, andaBaixo, andaEsq, andaDir, debug;
+    private     GridBagConstraints  c;
+
+    public JanelaPrincipal(){
+        c           = new GridBagConstraints();
         
         setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension (1920,1080));
-        
         setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
         pack();
-        
-        
-        // Definição do mapa
-        mapa = new Mapa();
-        mapa.inicializaMapa();
+
+    }
+    
+    public void criaJanela() {
+        // Definição do mapa (pSuperior)
         c.fill = GridBagConstraints.BOTH;
         c.gridheight = 1;
         c.gridx = 0;
@@ -44,7 +46,7 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
         c.weightx = 1.0;
         c.weighty = 1;
         add(mapa, c);
-        
+
         // Definição do Painel inferior
         JPanel pInferior = new JPanel();
         pInferior.setBackground(Color.BLUE);
@@ -56,9 +58,7 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
         c.weighty = 0.1;
         
         //Definição dos Botões de Movimentação
-        agente = mapa.getAgente();
-        wumpus = mapa.getWumpus();
-        monstro = mapa.getNovoMonstro();
+        
         JPanel botoes = new JPanel(new BorderLayout());
         // Movimento Cima
         andaCima = new JButton("Cima");
@@ -88,76 +88,65 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
         add(pInferior, c);
         
         setVisible(true);
-
     }
 
-    public Mapa getMapa(){
-        return mapa;
+    public void iniciaJogo() {
+        mapa        = new Mapa();
+
+        mapa.inicializaMapa();
+        agente = mapa.getAgente();
+        wumpus = mapa.getWumpus();
+        monstro = mapa.getNovoMonstro();
+
+        criaJanela();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         
-        SwingUtilities.invokeLater(new Runnable() {
-           @Override
-           public void run (){
-                agente.movimentaAcima(mapa);
-                turnoMonstros();
-                mapa.repaint();
-                if( !isAlive(agente)){
-                    System.out.println("Você Morreu");
-                    dispose();
-                }
-            } 
-        });
+       
+        agente.movimentaAcima(mapa);
+        turnoMonstros();
+        mapa.repaint();
+        if( !isAlive(agente)){
+            System.out.println("Você Morreu");
+            dispose();
+        }
         
     }
     private void esquerda(ActionEvent actionevent1) {
-        SwingUtilities.invokeLater(new Runnable() {
-           @Override
-           public void run (){
-                agente.movimentaEsquerda(mapa);
-                turnoMonstros();
-                mapa.repaint();
-                if( !isAlive(agente)){
-                    System.out.println("Você Morreu");
-                    dispose();
-                }
-           } 
-        });   
+        
+        agente.movimentaEsquerda(mapa);
+        turnoMonstros();
+        mapa.repaint();
+        if( !isAlive(agente)){
+            System.out.println("Você Morreu");
+            dispose();
+        }
+            
     }
 
     private void baixo(ActionEvent actionevent1) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run (){
-            agente.movimentaAbaixo(mapa);
-            turnoMonstros();
-            mapa.repaint();
-            if( !isAlive(agente)){
-                System.out.println("Você Morreu");
-                dispose();
-            }
-        } 
-    });
-        
+    
+        agente.movimentaAbaixo(mapa);
+        turnoMonstros();
+        mapa.repaint();
+        if( !isAlive(agente)){
+            System.out.println("Você Morreu");
+            dispose();
+        }      
         
     }
     private void direita(ActionEvent actionevent1) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run (){
-                agente.movimentaDireita(mapa);
-                turnoMonstros();
-                mapa.repaint();
-                if( !isAlive(agente)){
-                    System.out.println("Você Morreu");
-                    dispose();
-                }
-            } 
-        });
-        
-        
+   
+        agente.movimentaDireita(mapa);
+        turnoMonstros();
+        mapa.repaint();
+        if( !isAlive(agente)){
+            System.out.println("Você Morreu");
+            dispose();
+        }
+               
     }
     private void debug(ActionEvent actionevent1) {
         mapa.revelaMapa();
@@ -170,10 +159,16 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
             System.out.println("GRAW");
             System.out.println("Você Perdeu");
             this.dispose();
-        }
-            
+        }   
         monstro.movimenta(mapa);
         if(monstro.mesmoBloco(agente));
+    }
+
+    
+
+    // Métodos Especiais
+    public Mapa getMapa(){
+        return mapa;
     }
 
     public boolean isAlive (Personagem e){
@@ -183,13 +178,14 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
         return true;
     }
 
+
     public static void main(String[] args) {
-        JanelaPrincipal janela = new JanelaPrincipal();
 
         SwingUtilities.invokeLater(new Runnable(){
             @Override
             public void run() {
-                janela.abreJanela();
+                JanelaPrincipal janela = new JanelaPrincipal();
+                janela.iniciaJogo();
             }
         });
                 

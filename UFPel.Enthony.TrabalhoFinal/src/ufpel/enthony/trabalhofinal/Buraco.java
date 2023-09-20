@@ -24,6 +24,16 @@ public class Buraco extends JPanel {
         position = new Posicao();
     }
 
+    public void  gerarBrisa(Campo[][] mapa, Posicao position){
+        int x = position.getX();
+        int y = position.getY();
+
+        if (x != 0 )  mapa[x-1][y].setBreeze(true);
+        if (x != 14)  mapa[x+1][y].setBreeze(true);
+        if (y != 0 )  mapa[x][y-1].setBreeze(true);
+        if (y != 14)  mapa[x][y+1].setBreeze(true);
+    }
+
 
     public JLabel getLabel() {
         return label;

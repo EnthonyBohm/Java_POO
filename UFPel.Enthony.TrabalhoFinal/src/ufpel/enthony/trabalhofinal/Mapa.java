@@ -14,53 +14,58 @@ public class  Mapa extends JPanel{
         private     Buraco[]            buracos;
         private     Personagem[]        personagens;
         private     GridBagConstraints  c;
+        private     Campo               pAtual;
+        private     Agente              agente;
+        private     Wumpus              wumpus;
+        private     NovoMonstro         novoMonstro;
+
+        public Mapa() {
+            personagens         =   new Personagem[]{new Agente(), new Wumpus(), new NovoMonstro()};
+            objetos             =   new Objeto[]{new Madeira(), new Madeira()};
+            buracos             =   new Buraco[]{new Buraco () , new Buraco(), new Buraco(), new Buraco(), new Buraco()};
+            campo               =   new Campo[15][15];
+            c                   =   new GridBagConstraints();
+
+            agente              =   getAgente();
+            wumpus              =   getWumpus();
+            novoMonstro         =   getNovoMonstro();
+
+            setLayout(new GridBagLayout());
+            setVisible(true);
+        }
 
         public void  inicializaMapa (){
         //Inicializa o Mapa e todos Recursos que vão ser usados no jogo
-        personagens = new Personagem[]{new Agente(), new Wumpus(), new NovoMonstro()};
-        objetos = new Objeto[]{new Madeira(), new Madeira()};
-        buracos = new Buraco[]{new Buraco () , new Buraco(), new Buraco(), new Buraco(), new Buraco()};
-        campo = new Campo[15][15];
-        Campo pAtual;
-        c       = new GridBagConstraints();
-        Agente agente  = getAgente();
-        Wumpus wumpus = getWumpus();
-        NovoMonstro novoMonstro = getNovoMonstro();
-        
-        setLayout(new GridBagLayout());
-        setVisible(true);
-        
+
+        //Percorre Inicialmente colocando os blocos, o Agente e os Poços
         for(int i = 0; i < 15; i++){
             for(int j = 0; j < 15; j++){
                 //Define as características de cada campo do Mapa
                 c.gridx = i;
                 c.gridy = j;
-                c.weightx = 20;
-                c.weighty = 60;
+                c.weightx = 1;
+                c.weighty = 1;
                 c.fill = GridBagConstraints.BOTH;
                 c.insets = new Insets(0,1,1,1);
                 pAtual = campo[i][j] = new Campo(i, j);
                         
                 
                 //Adiciona o Agente
-                if(pAtual.getPosition().equals(agente.getPosition())){
+                if(pAtual.samePosition(agente)){
                     pAtual.deixaVisível();
                     pAtual.adicionaPersonagem(agente);
                 }
 
-                //Adiciona os Buracos
+                //Adiciona os Poços
                 for (Buraco buraco: buracos){
-                    if (buraco.getPosition().equals(pAtual.getPosition())){
-                        while (pAtual.isHasCharacter()){
+                    if (pAtual.samePosition(buraco)){
+                        while (pAtual.hasCharacter()){
                             buraco = new Buraco();
                         }
                         pAtual.adicionaPoco(buraco);
                     }
-                        
                 }
-                
                 add(pAtual, c);
-
             }
         }
         
@@ -68,31 +73,26 @@ public class  Mapa extends JPanel{
             for (int j = 0; j < 15; j++){
                 pAtual = campo[i][j];
                 
-                if (pAtual.HasTrap())     setBreeze(pAtual);
+                // Coloca a Brisa nas posições ao redor do poço
+                if ( pAtual.HasTrap() )     
+                    pAtual.getBuraco().gerarBrisa(campo, pAtual.getPosition());
 
                 //Adiciona os Itens
                 for (Objeto o: objetos){
-
-                    if(o.position.equals(pAtual.getPosition())){
-                        if(pAtual.isHasTrap() ){
-                            if ( o.getClass().equals(Madeira.class) )
-                                pAtual.tapaBuraco(pAtual.getBuraco());
-                        } else
+                    if( pAtual.samePosition(o) ){
+                        if (pAtual.HasTrap() && o instanceof Madeira)
+                            pAtual.tapaBuraco( pAtual.getBuraco() );
+                        else
                             pAtual.adicionaItem(o);
                     }
-                    
                 }
 
-                if ( !(pAtual.HasTrap()) && wumpus.getPosition().equals(pAtual.getPosition())){
+                //Adiciona os monstros
+                if (    pAtual.samePosition(wumpus)         &&      !pAtual.HasTrap()   )
                     pAtual.adicionaPersonagem(wumpus);
-                    System.out.printf("Wumpus adicionado na Posição [%d,%d] \n",pAtual.getPosition().getX(), pAtual.getPosition().getY());
-                }
-                    
-                if ( !(pAtual.HasTrap()) && novoMonstro.getPosition().equals(pAtual.getPosition())){
+
+                if (    pAtual.samePosition(novoMonstro)    &&      !pAtual.HasTrap()   )
                     pAtual.adicionaPersonagem(novoMonstro);
-                    System.out.printf("NovoMonstro adicionado na Posição [%d,%d] \n",pAtual.getPosition().getX(), pAtual.getPosition().getY());
-                }
-                    
 
             }
         }
@@ -130,17 +130,5 @@ public class  Mapa extends JPanel{
     }
     public Campo[][] getCampo () {
         return campo;
-    }
-
-    public void setBreeze(Campo pAtual){
-        int x, y;
-        x = pAtual.getPosition().getX();
-        y = pAtual.getPosition().getY();
-
-        if ( x != 0)    campo[x-1][y].setHasBreeze(true);
-        if ( x != 14)   campo[x+1][y].setHasBreeze(true);
-        if ( y != 0)    campo[x][y-1].setHasBreeze(true);
-        if ( y != 14)   campo[x][y+1].setHasBreeze(true);
-        
     }
 }
