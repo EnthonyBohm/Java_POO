@@ -4,7 +4,6 @@ package ufpel.enthony.trabalhofinal;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
 public class Agente extends Personagem{ 
 //    Metodos Herdados
@@ -24,6 +23,33 @@ public class Agente extends Personagem{
         objetos = new ArrayList<>();
 
         setVisible(true);
+    }
+
+    public void usaLanterna(int direction, Campo[][] mapa, Posicao pAtual){
+        int x, y, i;
+        x = pAtual.getX();
+        y = pAtual.getY();
+
+        if (bateriaLanterna > 0){
+            switch (direction){
+                case 1:
+                    for(i = x; i < 15; i++)
+                        mapa[i][y].deixaVisível();
+                    break;
+                case 2:
+                    for(i = x; i > 0; i--)
+                        mapa[i][y].deixaVisível();
+                    break;
+                case 3:
+                    for(i = y; i < 15; i++)
+                        mapa[x][i].deixaVisível();
+                    break;
+                case 4:
+                    for(i = y; i > 0; i--)
+                        mapa[x][i].deixaVisível();
+                    break;
+            }
+        }
     }
 
 

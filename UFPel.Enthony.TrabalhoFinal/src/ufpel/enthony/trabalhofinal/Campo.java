@@ -20,7 +20,7 @@ public class Campo extends JPanel{
     private     Posicao             position;
     private     boolean             visivel;
     private     boolean             hasItem, hasCharacter, hasTrap;
-    private     boolean             isStinky, hasBreeze, hasShine;
+    private     boolean             stinky, hasBreeze, hasShine;
     private     GridBagConstraints  c;
     private     Buraco              poco;
     private     JPanel              painel, mensagens;
@@ -50,6 +50,7 @@ public class Campo extends JPanel{
 
         // Inicializa Informações do JPanel mensagens
         mensagens.setBackground(null);
+        painel.add(mensagens);
 
         //Definição das Restrições
         // c.anchor    = GridBagConstraints.CENTER;
@@ -150,17 +151,13 @@ public class Campo extends JPanel{
             brisa.setFont(new Font("Comic Sans MS", 0, 10));
             brisa.setVisible(true);
             mensagens.add(brisa);
-            painel.add(mensagens);
             repaint();
         }  
         if (hasShine) {
             brilho = new JLabel("Brilho");
         }
-        if (isStinky) {
-            fedor = new JLabel("Fedor");
-            fedor.setFont(new Font("Comic Sans MS", 0, 10));
-            painel.add(fedor);
-        }
+        if (stinky) 
+            adicionaFedor();
     }
     
     public boolean samePosition (Campo p){
@@ -174,6 +171,23 @@ public class Campo extends JPanel{
     }
     public boolean samePosition (Buraco p){
         return position.samePosition(p.getPosition());
+    }
+    
+
+    public void adicionaFedor(){
+        if (!stinky){
+            fedor = new JLabel("Fedor");
+            fedor.setFont(new Font("Comic Sans MS", 0, 10));
+            fedor.setVisible(true);
+            mensagens.add(fedor); 
+            stinky = true;
+        }
+    }
+    public void removeFedor() {
+        if (stinky && visivel){
+            mensagens.remove(fedor);
+            stinky = false;
+        }
     }
     
     // Métodos Especiais
@@ -218,10 +232,10 @@ public class Campo extends JPanel{
     }
 
     public boolean isStinky() {
-        return isStinky;
+        return stinky;
     }
     public void setIsStinky(boolean isStinky) {
-        this.isStinky = isStinky;
+        this.stinky = isStinky;
     }
 
     public boolean hasBreeze() {

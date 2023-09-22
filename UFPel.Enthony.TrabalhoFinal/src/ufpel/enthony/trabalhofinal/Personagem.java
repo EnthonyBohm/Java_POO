@@ -20,10 +20,10 @@ public abstract class Personagem extends JPanel{
     
     //Métodos Especiais
     public Personagem(String classe, ImageIcon icone) {
-        c           =   new GridBagConstraints();
-        position    =   new Posicao();
-        vida        =   100;
-        this.classe =   classe;
+        c               =   new GridBagConstraints();
+        position        =   new Posicao();
+        vida            =   100;
+        this.classe     =   classe;
         
 
         //Definição do Layout
@@ -42,31 +42,29 @@ public abstract class Personagem extends JPanel{
 
 
     //Métodos Referentes à movimentação do Personagem
-    public boolean movimentaDireita (Mapa map){
-        this.mapa = map.getCampo();
+    public boolean movimentaDireita (Campo[][] mapa){
         Campo pAtual, pProx;
-        pAtual = this.mapa[position.getX()][position.getY()];
+        pAtual = mapa[position.getX()][position.getY()];
         
         // Testa para ver se a próxima posição não esta fora do limite e nem tem um poço
         if (position.moveDireita() == false)
             return false;
-        pProx = this.mapa[position.getX()][position.getY()];
+        pProx = mapa[position.getX()][position.getY()];
         if (pProx.HasTrap()){
             position.moveEsquerda();
             return false;
         }
         
-        atualizaPosicoes(map, pAtual, pProx);
+        atualizaPosicoes(mapa, pAtual, pProx);
 
         return true;
     }
-    public boolean movimentaAbaixo (Mapa mapa){
-        this.mapa = mapa.getCampo();
+    public boolean movimentaAbaixo (Campo[][] mapa){
         Campo pAtual, pProx;
-        pAtual = this.mapa[position.getX()][position.getY()];
+        pAtual =  mapa[position.getX()][position.getY()];
         if (position.moveAbaixo() == false )
             return false;
-        pProx = this.mapa[position.getX()][position.getY()];
+        pProx =  mapa[position.getX()][position.getY()];
         if (pProx.HasTrap()){
             position.moveAcima();
             return false;
@@ -76,14 +74,12 @@ public abstract class Personagem extends JPanel{
 
         return true;
     }
-    public boolean movimentaEsquerda (Mapa mapa){
+    public boolean movimentaEsquerda (Campo[][] mapa){
         Campo pAtual, pProx;
-        
-        this.mapa = mapa.getCampo();
-        pAtual = this.mapa[position.getX()][position.getY()];
+        pAtual = mapa[position.getX()][position.getY()];
         if (position.moveEsquerda() == false)
             return false;    
-        pProx = this.mapa[position.getX()][position.getY()];
+        pProx = mapa[position.getX()][position.getY()];
 
         if (pProx.HasTrap()){
             position.moveDireita();
@@ -95,14 +91,13 @@ public abstract class Personagem extends JPanel{
 
         return true;
     }
-    public boolean movimentaAcima (Mapa mapa){
-        Campo[][] map = mapa.getCampo();
+    public boolean movimentaAcima (Campo[][] mapa){
         Campo pAtual, pProx;
-        pAtual = map[position.getX()][position.getY()];
+        pAtual = mapa[position.getX()][position.getY()];
 
         if (position.moveAcima() == false) 
             return false;
-        pProx = mapa.getCampo()[position.getX()][position.getY()];
+        pProx = mapa[position.getX()][position.getY()];
         if (pProx.HasTrap()){
             position.moveAbaixo();
             return false;
@@ -113,7 +108,7 @@ public abstract class Personagem extends JPanel{
         return true;
     }
 
-    public void atualizaPosicoes(Mapa map, Campo pAtual, Campo pProx){
+    public void atualizaPosicoes(Campo[][] mapa, Campo pAtual, Campo pProx){
         pAtual.removePersonagem(this);
 
 
@@ -129,10 +124,10 @@ public abstract class Personagem extends JPanel{
 
     //Métodos Referentes a posição do Personagem e outros Personagens/Objetos
     public boolean mesmoBloco (Personagem e){
-        return this.getPosition().equals(e.getPosition());
+        return getPosition().equals(e.getPosition());
     }
     public boolean mesmoBloco (Objeto e){
-        return this.getPosition().equals(e.getPosition());
+        return getPosition().equals(e.getPosition());
     }
     public boolean mesmoBloco(Buraco e){
         return position.equals(e.getPosition());
@@ -156,7 +151,7 @@ public abstract class Personagem extends JPanel{
     }
     
     public String getClasse (){
-        return this.classe;
+        return classe;
     }
 
     public Posicao getPosition() {

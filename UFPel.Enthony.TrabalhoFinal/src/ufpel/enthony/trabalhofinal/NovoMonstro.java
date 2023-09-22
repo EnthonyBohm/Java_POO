@@ -4,7 +4,7 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 
-public class NovoMonstro extends Personagem{
+public class NovoMonstro extends Monstro{
     //    Metodos Herdados
     //    int pv
     //    boolean visivel
@@ -27,119 +27,123 @@ public class NovoMonstro extends Personagem{
         System.out.println("SLASSHHH");
     }
 
-    public void movimenta (Mapa mapa){
+    @Override
+    public void movimenta(Mapa mapa, Posicao pAtual) {
         Agente a = mapa.getAgente();
-        Posicao p = a.getPosition();
+        Posicao pAgente = a.getPosition();
+        Campo[][] campo = mapa.getCampo();
         boolean done = false;
+
+        super.removerFedor(campo, pAtual);
         while (!done){
             mov1 = randomDirection.nextInt(1, 5);
             mov2 = randomDirection.nextInt(0, 2);
-
             switch(mov1){
 
                 case 1:
 
                     //Primeiro Passo
-                    if (movimentaDireita(mapa) == false) continue;
-                    if (position.equals(p))         atacar(a);
+                    if (movimentaDireita(campo) == false) continue;
+                    if (position.equals(pAgente))         atacar(a);
 
                     //Segundo Passo
-                    if (movimentaDireita(mapa) == false){
-                        movimentaEsquerda(mapa);
+                    if (movimentaDireita(campo) == false){
+                        movimentaEsquerda(campo);
                         continue;
                     }
-                    if (position.equals(p))         atacar(a);
+                    if (position.equals(pAgente))         atacar(a);
                     
                     //Terceiro Passo
                     if (mov2 == 0){
-                        done = movimentaAcima(mapa) ; if (done) break;
-                        done = movimentaAbaixo(mapa); if (done) break;
+                        done = movimentaAcima(campo) ; if (done) break;
+                        done = movimentaAbaixo(campo); if (done) break;
                     } else{
-                        done = movimentaAbaixo(mapa); if (done) break;
-                        done = movimentaAcima(mapa) ; if (done) break;
+                        done = movimentaAbaixo(campo); if (done) break;
+                        done = movimentaAcima(campo) ; if (done) break;
                     }
-                    movimentaEsquerda(mapa);    
-                    movimentaEsquerda(mapa);
+                    movimentaEsquerda(campo);    
+                    movimentaEsquerda(campo);
                     break;
                 
             case 2:
                 
                 //Primeiro Passo
-                if (movimentaEsquerda(mapa) == false ) continue;
-                if (position.equals(p))         atacar(a);
+                if (movimentaEsquerda(campo) == false ) continue;
+                if (position.equals(pAgente))         atacar(a);
 
                 //Segundo Passo
-                if (movimentaEsquerda(mapa) == false ){
-                    movimentaDireita(mapa);
+                if (movimentaEsquerda(campo) == false ){
+                    movimentaDireita(campo);
                     continue;
                 }
-                if (position.equals(p))         atacar(a);
+                if (position.equals(pAgente))         atacar(a);
 
                 //Terceiro Passo
                 if (mov2 == 0){
-                    done = movimentaAcima(mapa) ; if (done) break;
-                    done = movimentaAbaixo(mapa); if (done) break;
+                    done = movimentaAcima(campo) ; if (done) break;
+                    done = movimentaAbaixo(campo); if (done) break;
                 } else{
-                    done = movimentaAbaixo(mapa); if (done) break;
-                    done = movimentaAcima(mapa) ; if (done) break;
+                    done = movimentaAbaixo(campo); if (done) break;
+                    done = movimentaAcima(campo) ; if (done) break;
                 }
-                movimentaDireita(mapa);    
-                movimentaDireita(mapa);
+                movimentaDireita(campo);    
+                movimentaDireita(campo);
                 break;
 
             case 3:
                 
                 //Primeiro Passo
-                if (movimentaAcima(mapa) == false) continue;    
-                if (position.equals(p))         atacar(a);
+                if (movimentaAcima(campo) == false) continue;    
+                if (position.equals(pAgente))         atacar(a);
                 
                 //Segundo Passo
-                if (movimentaAcima(mapa) == false){
-                    movimentaAbaixo(mapa);
+                if (movimentaAcima(campo) == false){
+                    movimentaAbaixo(campo);
                     continue;
                 }
-                if (position.equals(p))         atacar(a);
+                if (position.equals(pAgente))         atacar(a);
 
                 //Terceiro Passo
                 if (mov2 == 0){
-                    done = movimentaDireita(mapa) ; if (done) break;
-                    done = movimentaEsquerda(mapa); if (done) break;
+                    done = movimentaDireita(campo) ; if (done) break;
+                    done = movimentaEsquerda(campo); if (done) break;
                 } else{
-                    done = movimentaDireita(mapa); if (done) break;
-                    done = movimentaEsquerda(mapa) ; if (done) break;
+                    done = movimentaDireita(campo); if (done) break;
+                    done = movimentaEsquerda(campo) ; if (done) break;
                 }
-                movimentaAbaixo(mapa);
-                movimentaAbaixo(mapa);
+                movimentaAbaixo(campo);
+                movimentaAbaixo(campo);
                 break;
 
             case 4:
                 
                 //Primeiro Passo
-                if (movimentaAbaixo(mapa) == false) continue;
-                if (position.equals(p))         atacar(a);
+                if (movimentaAbaixo(campo) == false) continue;
+                if (position.equals(pAgente))         atacar(a);
 
                 //Segundo Passo
-                if (movimentaAbaixo(mapa) == false){
-                    movimentaAcima(mapa);
+                if (movimentaAbaixo(campo) == false){
+                    movimentaAcima(campo);
                     continue;
                 }
-                if (position.equals(p))         atacar(a);
+                if (position.equals(pAgente))         atacar(a);
                 
                 //Terceiro Passo
                 if (mov2 == 0){
-                    done = movimentaDireita(mapa) ; if (done) break;
-                    done = movimentaEsquerda(mapa); if (done) break;
+                    done = movimentaDireita(campo) ; if (done) break;
+                    done = movimentaEsquerda(campo); if (done) break;
                 } else{
-                    done = movimentaDireita(mapa); if (done) break;
-                    done = movimentaEsquerda(mapa) ; if (done) break;
+                    done = movimentaDireita(campo); if (done) break;
+                    done = movimentaEsquerda(campo) ; if (done) break;
                 }
-                movimentaAcima(mapa);
-                movimentaAcima(mapa);
+                movimentaAcima(campo);
+                movimentaAcima(campo);
         
                 break;
 
             }        
         }
+        super.emanarFedor(campo, pAtual);
     }
 }
     

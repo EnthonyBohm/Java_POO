@@ -19,12 +19,14 @@ import javax.swing.SwingUtilities;
 
 
 public class JanelaPrincipal extends JFrame implements ActionListener{
-    private     Mapa                mapa;
-    private     Agente              agente;
-    private     Wumpus              wumpus;
-    private     NovoMonstro         monstro;
-    private     JButton             andaCima, andaBaixo, andaEsq, andaDir, debug;
-    private     GridBagConstraints  c;
+    private         Mapa                mapa;
+    private         Campo[][]           campo;
+    private         Agente              agente;
+    private         Wumpus              wumpus;
+    private         NovoMonstro         novoMonstro;
+    private         JButton             andaCima, andaBaixo, andaEsq, andaDir, debug;
+    private         GridBagConstraints  c;
+    private final   int                 DIREITA = 1, ESQUERDA = 2, CIMA = 3, BAIXO = 4;
 
     public JanelaPrincipal(){
         c           = new GridBagConstraints();
@@ -92,11 +94,12 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
 
     public void iniciaJogo() {
         mapa        = new Mapa();
-
         mapa.inicializaMapa();
-        agente = mapa.getAgente();
-        wumpus = mapa.getWumpus();
-        monstro = mapa.getNovoMonstro();
+        
+        campo       = mapa.getCampo();
+        agente      = mapa.getAgente();
+        wumpus      = mapa.getWumpus();
+        novoMonstro     = mapa.getNovoMonstro();
 
         criaJanela();
     }
@@ -105,7 +108,7 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         
        
-        agente.movimentaAcima(mapa);
+        agente.movimentaAcima(campo);
         turnoMonstros();
         mapa.repaint();
         if( !isAlive(agente)){
@@ -116,7 +119,7 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
     }
     private void esquerda(ActionEvent actionevent1) {
         
-        agente.movimentaEsquerda(mapa);
+        agente.movimentaEsquerda(campo);
         turnoMonstros();
         mapa.repaint();
         if( !isAlive(agente)){
@@ -128,7 +131,7 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
 
     private void baixo(ActionEvent actionevent1) {
     
-        agente.movimentaAbaixo(mapa);
+        agente.movimentaAbaixo(campo);
         turnoMonstros();
         mapa.repaint();
         if( !isAlive(agente)){
@@ -139,7 +142,7 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
     }
     private void direita(ActionEvent actionevent1) {
    
-        agente.movimentaDireita(mapa);
+        agente.movimentaDireita(campo);
         turnoMonstros();
         mapa.repaint();
         if( !isAlive(agente)){
@@ -153,15 +156,17 @@ public class JanelaPrincipal extends JFrame implements ActionListener{
     }   
 
     public void turnoMonstros(){
-        wumpus.movimenta(mapa);
+        wumpus.movimenta(mapa, wumpus.getPosition());
         if(wumpus.mesmoBloco(agente)){
-            wumpus.ataca(agente);
+            wumpus.atacar(agente);
             System.out.println("GRAW");
             System.out.println("Você Perdeu");
             this.dispose();
         }   
-        monstro.movimenta(mapa);
-        if(monstro.mesmoBloco(agente));
+        novoMonstro.movimenta(mapa, novoMonstro.getPosition());
+        if(novoMonstro.mesmoBloco(agente));
+
+        pack();
     }
 
     

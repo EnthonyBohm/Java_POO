@@ -4,7 +4,7 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 
-public class Wumpus extends Personagem {
+public class Wumpus extends Monstro {
     //    Metodos Herdados
     //    int pv
     //    boolean visivel 
@@ -20,50 +20,37 @@ public class Wumpus extends Personagem {
         setVisible(false);
     }
 
-    public void ataca (Agente e){
+
+    @Override
+    public void atacar(Agente e) {
         e.setVida(0);
     }
 
-    public void movimenta (Mapa mapa){
+    @Override
+    public void movimenta(Mapa mapa, Posicao pAtual) {
+
         boolean done = false;
+        Campo[][] campo = mapa.getCampo();
+        
+        super.removerFedor(campo, pAtual);
         while (!done){
-            try {
             movimento = randDirection.nextInt(1, 5);
             switch (movimento){
                 case 1:
-                    done = movimentaDireita(mapa);
+                    done = movimentaDireita(campo);
                     break;
                 case 2:
-                    done = movimentaEsquerda(mapa);
+                    done = movimentaEsquerda(campo);
                     break;
                 case 3:
-                    done = movimentaAcima(mapa);
+                    done = movimentaAcima(campo);
                     break;
                 case 4:
-                    done = movimentaAbaixo(mapa);
+                    done = movimentaAbaixo(campo);
                     break;
             }
-        } catch (ImpossibleToPassTrapException e){
-            continue;
-        } catch(ArrayIndexOutOfBoundsException e){
-            continue;
         }
-        
-        }
-
+        super.emanarFedor(campo, pAtual);
     }
 
-    public void emanarFedor (Campo[][] mapa, Posicao pAtual){
-        int x,y;
-        x = pAtual.getX();
-        y = pAtual.getY();
-        if (pAtual.moveEsquerda())
-            mapa[x-1][y].setIsStinky(true);
-        if (pAtual.moveDireita())
-            mapa[x+1][y].setIsStinky(true);
-        if (pAtual.moveAcima() )
-            mapa[x][y+1].setIsStinky(true);
-        if (pAtual.moveAbaixo() )
-            mapa[x][y-1].setIsStinky(true);
-    }
 }
