@@ -27,30 +27,49 @@ public class Wumpus extends Monstro {
     }
 
     @Override
-    public void movimenta(Mapa mapa, Posicao pAtual) {
+    public void movimentar(Mapa mapa, Posicao pAtual) {
 
         boolean done = false;
         Campo[][] campo = mapa.getCampo();
+        Campo   atual, prox;
         
-        super.removerFedor(campo, pAtual);
+        atual = campo[position.getX()][position.getY()];
+        super.removerFedor(campo, position);
         while (!done){
             movimento = randDirection.nextInt(1, 5);
             switch (movimento){
-                case 1:
-                    done = movimentaDireita(campo);
+                case DIREITA:
+                    done = movimenta(movimento);
                     break;
-                case 2:
-                    done = movimentaEsquerda(campo);
+                case ESQUERDA:
+                    done = movimenta(movimento);
                     break;
-                case 3:
-                    done = movimentaAcima(campo);
+                case CIMA:
+                    done = movimenta(movimento);
                     break;
-                case 4:
-                    done = movimentaAbaixo(campo);
+                case BAIXO:
+                    done = movimenta(movimento);
                     break;
             }
+            if (done){
+                if ( campo[position.getX()][position.getY()].HasTrap()){
+                    position = atual.getPosition();
+                    done = false;
+                }
+            }
+            
         }
-        super.emanarFedor(campo, pAtual);
+        super.emanarFedor(campo, position);
+        prox = campo[position.getX()][position.getY()];
+        
+        atual.removePersonagem(this);
+        if (prox.isVisivel()==false){
+            setVisible(false);
+            prox.adicionaPersonagem(this);
+        }else{
+            setVisible(true);
+            prox.adicionaPersonagem(this);
+        }
     }
 
 }

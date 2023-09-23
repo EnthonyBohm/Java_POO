@@ -3,6 +3,8 @@ package ufpel.enthony.trabalhofinal;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -21,7 +23,7 @@ public class  Mapa extends JPanel{
 
         public Mapa() {
             personagens         =   new Personagem[]{new Agente(), new Wumpus(), new NovoMonstro()};
-            objetos             =   new Objeto[]{new Madeira(), new Madeira()};
+            objetos             =   new Objeto[]{new Madeira(), new Madeira(), new Ouro()};
             buracos             =   new Buraco[]{new Buraco () , new Buraco(), new Buraco(), new Buraco(), new Buraco()};
             campo               =   new Campo[15][15];
             c                   =   new GridBagConstraints();
@@ -54,6 +56,8 @@ public class  Mapa extends JPanel{
                 if(pAtual.samePosition(agente)){
                     pAtual.deixaVisível();
                     pAtual.adicionaPersonagem(agente);
+                    pAtual.add(new JLabel("COMECO"));
+                    pAtual.setStart(true);
                 }
 
                 //Adiciona os Poços
@@ -79,9 +83,9 @@ public class  Mapa extends JPanel{
 
                 //Adiciona os Itens
                 for (Objeto o: objetos){
-                    if( pAtual.samePosition(o) ){
+                    if( pAtual.samePosition(o) && !pAtual.hasItem() ){
                         if (pAtual.HasTrap() && o instanceof Madeira)
-                            pAtual.tapaBuraco( pAtual.getBuraco() );
+                            pAtual.tapaBuraco();
                         else
                             pAtual.adicionaItem(o);
                     }

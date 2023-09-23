@@ -9,7 +9,7 @@ public abstract class Monstro extends Personagem{
     }
 
     public abstract void atacar (Agente e);
-    public abstract void movimenta (Mapa mapa, Posicao pAtual);
+    public abstract void movimentar (Mapa mapa, Posicao pAtual);
     public void emanarFedor(Campo[][] mapa, Posicao pAtual){
         int x,y;
         Campo campoAtual;

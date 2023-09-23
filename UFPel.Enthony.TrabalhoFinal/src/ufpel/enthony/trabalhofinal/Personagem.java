@@ -17,6 +17,7 @@ public abstract class Personagem extends JPanel{
     protected       Campo[][]           mapa;
     protected       JLabel              texto;
     protected       GridBagConstraints  c;
+    protected final int                 DIREITA = 1, ESQUERDA = 2, CIMA = 3, BAIXO = 4;
     
     //Métodos Especiais
     public Personagem(String classe, ImageIcon icone) {
@@ -24,7 +25,6 @@ public abstract class Personagem extends JPanel{
         position        =   new Posicao();
         vida            =   100;
         this.classe     =   classe;
-        
 
         //Definição do Layout
         setLayout(new GridBagLayout());
@@ -42,83 +42,25 @@ public abstract class Personagem extends JPanel{
 
 
     //Métodos Referentes à movimentação do Personagem
-    public boolean movimentaDireita (Campo[][] mapa){
-        Campo pAtual, pProx;
-        pAtual = mapa[position.getX()][position.getY()];
-        
-        // Testa para ver se a próxima posição não esta fora do limite e nem tem um poço
-        if (position.moveDireita() == false)
-            return false;
-        pProx = mapa[position.getX()][position.getY()];
-        if (pProx.HasTrap()){
-            position.moveEsquerda();
-            return false;
-        }
-        
-        atualizaPosicoes(mapa, pAtual, pProx);
+    public boolean movimenta (int movimento) {
+        boolean done = false;
 
-        return true;
-    }
-    public boolean movimentaAbaixo (Campo[][] mapa){
-        Campo pAtual, pProx;
-        pAtual =  mapa[position.getX()][position.getY()];
-        if (position.moveAbaixo() == false )
-            return false;
-        pProx =  mapa[position.getX()][position.getY()];
-        if (pProx.HasTrap()){
-            position.moveAcima();
-            return false;
-        }
-        
-       atualizaPosicoes(mapa, pAtual, pProx);
-
-        return true;
-    }
-    public boolean movimentaEsquerda (Campo[][] mapa){
-        Campo pAtual, pProx;
-        pAtual = mapa[position.getX()][position.getY()];
-        if (position.moveEsquerda() == false)
-            return false;    
-        pProx = mapa[position.getX()][position.getY()];
-
-        if (pProx.HasTrap()){
-            position.moveDireita();
-            return false;
+        switch (movimento){
+            case DIREITA:         
+                done = position.moveDireita();
+                break;
+            case ESQUERDA:         
+                done = position.moveEsquerda() ;
+                break;  
+            case CIMA:         
+                done = position.moveAcima() ;
+                break;
+            case BAIXO:         
+                done = position.moveAbaixo();
+                break;
         }
 
-        atualizaPosicoes(mapa, pAtual, pProx);
-
-
-        return true;
-    }
-    public boolean movimentaAcima (Campo[][] mapa){
-        Campo pAtual, pProx;
-        pAtual = mapa[position.getX()][position.getY()];
-
-        if (position.moveAcima() == false) 
-            return false;
-        pProx = mapa[position.getX()][position.getY()];
-        if (pProx.HasTrap()){
-            position.moveAbaixo();
-            return false;
-        }
-        
-        atualizaPosicoes(mapa, pAtual, pProx);
-
-        return true;
-    }
-
-    public void atualizaPosicoes(Campo[][] mapa, Campo pAtual, Campo pProx){
-        pAtual.removePersonagem(this);
-
-
-        if (  ((pProx.isVisivel() == false) ) && ( this instanceof Agente )  )
-            pProx.deixaVisível();
-        // if ( this instanceof Wumpus || this instanceof NovoMonstro)
-        //     map.getWumpus().emanarFedor(map.getCampo(), position);
-            
-        pProx.adicionaPersonagem(this);
-        
+        return done;
     }
 
 

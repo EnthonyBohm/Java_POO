@@ -16,22 +16,21 @@ import javax.swing.JPanel;
  */
 public class Campo extends JPanel{
     private     Set <Personagem>    personagens;
-    private     Set <Objeto>        itens;
+    private     Objeto              item;
     private     Posicao             position;
     private     boolean             visivel;
     private     boolean             hasItem, hasCharacter, hasTrap;
-    private     boolean             stinky, hasBreeze, hasShine;
+    private     boolean             stinky, hasBreeze, hasShine, isStart;
     private     GridBagConstraints  c;
     private     Buraco              poco;
     private     JPanel              painel, mensagens;
-    private     JLabel              fedor, brisa, brilho;
+    private     JLabel              fedor, brisa;
     
     public Campo (int x, int y) {
         // Inicializa as variáveis
         c           =   new GridBagConstraints();
         painel      =   new JPanel();
         personagens =   new HashSet<>();
-        itens       =   new HashSet<>();
         position    =   new Posicao(x,y);
         mensagens   =   new JPanel(new GridBagLayout());
 
@@ -59,29 +58,25 @@ public class Campo extends JPanel{
     }
     
     public void adicionaItem(Objeto o){        
-        
         hasItem = true;
-        itens.add(o);
+        item = o;
         painel.add(o);
-
     }
-    public Objeto getItem (String nome){
-
-        for (Objeto item: itens){
-            if (item.getTipo().equals(nome)){
-                if (itens.size() == 1) hasItem = false;
-                painel.remove(item);
-                itens.remove(item);
-                return item;
-            }
+    public Objeto getItem (){
+        return item;
+    }
+    public void removeItem(){
+        if(hasItem){
+            hasItem = false;
+            painel.remove(item);
+            item = null;
         }
-        return null;
 
     }
     
     public void adicionaPersonagem (Personagem e) {
         if (!(e instanceof Agente) && visivel == false){
-            e.setVisible(false);
+            e.setVisivel(false);
         }
         
         // Adiciona Personagem a Conjunto de Personagens
@@ -116,7 +111,7 @@ public class Campo extends JPanel{
         // Adiciona o Poço ao painel;
         painel.add(poco);
     }
-    public void tapaBuraco (Buraco e){
+    public void tapaBuraco (){
         hasTrap = false;
         painel.remove(poco);
     }
@@ -153,9 +148,6 @@ public class Campo extends JPanel{
             mensagens.add(brisa);
             repaint();
         }  
-        if (hasShine) {
-            brilho = new JLabel("Brilho");
-        }
         if (stinky) 
             adicionaFedor();
     }
@@ -208,10 +200,6 @@ public class Campo extends JPanel{
     public Set<Personagem> getPersonagens() {
         return personagens;
     }
-    
-    public Set<Objeto> getItens() {
-        return itens;
-    }
 
     public boolean isVisivel() {
         return visivel;
@@ -252,5 +240,11 @@ public class Campo extends JPanel{
         this.hasShine = hasShine;
     }
     
+    public void setStart(boolean isStart){
+        this.isStart = isStart;
+    }
+    public boolean getStart (){
+        return isStart;
+    }
     
 } 
