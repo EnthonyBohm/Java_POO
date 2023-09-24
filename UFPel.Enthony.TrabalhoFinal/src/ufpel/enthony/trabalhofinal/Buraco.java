@@ -11,7 +11,8 @@ import javax.swing.JPanel;
  */
 public class Buraco extends JPanel {
     private Posicao position;
-    private JLabel label;
+    private JLabel  label;
+    private int     x,y;
     
     public Buraco () {
         this.setVisible(false);
@@ -22,18 +23,23 @@ public class Buraco extends JPanel {
         setFont(new Font("Comic Sans MS", 0, 12));
         add(label);
         position = new Posicao();
+        x = position.getX();
+        y = position.getY();
     }
 
     public void  gerarBrisa(Campo[][] mapa, Posicao position){
-        int x = position.getX();
-        int y = position.getY();
-
         if (x != 0 )  mapa[x-1][y].setBreeze(true);
         if (x != 14)  mapa[x+1][y].setBreeze(true);
         if (y != 0 )  mapa[x][y-1].setBreeze(true);
         if (y != 14)  mapa[x][y+1].setBreeze(true);
     }
 
+    public void removerBrisa (Campo[][] mapa, Posicao position){
+        if (x != 0 )  mapa[x-1][y].removeBrisa();
+        if (x != 14)  mapa[x+1][y].removeBrisa();
+        if (y != 0 )  mapa[x][y-1].removeBrisa();
+        if (y != 14)  mapa[x][y+1].removeBrisa();
+    }
 
     public JLabel getLabel() {
         return label;

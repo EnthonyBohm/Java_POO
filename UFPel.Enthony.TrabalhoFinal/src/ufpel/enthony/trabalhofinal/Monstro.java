@@ -3,13 +3,16 @@ package ufpel.enthony.trabalhofinal;
 import javax.swing.ImageIcon;
 
 public abstract class Monstro extends Personagem{
+    private       boolean         alive;
 
     public Monstro (String classe, ImageIcon icone){
         super(classe, icone);
+        alive = true;
     }
 
     public abstract void atacar (Agente e);
     public abstract void movimentar (Mapa mapa, Posicao pAtual);
+
     public void emanarFedor(Campo[][] mapa, Posicao pAtual){
         int x,y;
         Campo campoAtual;
@@ -63,5 +66,12 @@ public abstract class Monstro extends Personagem{
             campoAtual = mapa[x][y+1];
             campoAtual.removeFedor();
         }
+    }
+
+    public boolean isAlive () {
+        return alive;
+    }
+    public void kill (){
+        alive = false;
     }
 }

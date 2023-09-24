@@ -31,7 +31,6 @@ public class Posicao {
             return true;
         }
     }
-
     public boolean moveAbaixo() {
         if (getY() == 14)
             return false;
@@ -39,7 +38,6 @@ public class Posicao {
         posicao[1] += 1;
         return true;
     }
-
     public boolean moveDireita() {
         if (getX() == 14)
             return false;
@@ -47,7 +45,6 @@ public class Posicao {
         posicao[0] += 1;
         return true;
     }
-
     public boolean moveEsquerda() {
         if (getX() == 0)
             return false;
@@ -55,8 +52,18 @@ public class Posicao {
         return true;
     }
 
-    public boolean samePosition(Posicao p) {
-        return this.equals(p);
+    public boolean samePosition(Object e) {
+        if (e instanceof Objeto){
+            return this.equals(((Objeto)e).getPosition());
+        }
+        else if (e instanceof Personagem) {
+            return this.equals(((Personagem)e).getPosition());
+        }
+        else if (e instanceof Buraco) {
+            return this.equals(((Buraco)e).getPosition());
+        }
+
+        return false;
     }
 
     // Métodos Especiais

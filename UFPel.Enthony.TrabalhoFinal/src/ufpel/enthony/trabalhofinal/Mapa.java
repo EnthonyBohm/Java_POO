@@ -37,9 +37,7 @@ public class  Mapa extends JPanel{
         }
 
         public void  inicializaMapa (){
-        //Inicializa o Mapa e todos Recursos que vão ser usados no jogo
-
-        //Percorre Inicialmente colocando os blocos, o Agente e os Poços
+        //Inicia todas as posições do mapa
         for(int i = 0; i < 15; i++){
             for(int j = 0; j < 15; j++){
                 //Define as características de cada campo do Mapa
@@ -69,23 +67,29 @@ public class  Mapa extends JPanel{
                         pAtual.adicionaPoco(buraco);
                     }
                 }
+
+                //Adiciona ao mapa o campo atual
                 add(pAtual, c);
             }
         }
         
+        // Percorre o mapa denovo adicionando objetos e Brisa
         for(int i = 0; i < 15; i++){
             for (int j = 0; j < 15; j++){
                 pAtual = campo[i][j];
                 
                 // Coloca a Brisa nas posições ao redor do poço
-                if ( pAtual.HasTrap() )     
+                if ( pAtual.HasTrap() ){ 
                     pAtual.getBuraco().gerarBrisa(campo, pAtual.getPosition());
+                    continue;
+                }// Condicional Garante que não seja possível adicionar Poço e outras coisas na mesma posição
+
 
                 //Adiciona os Itens
                 for (Objeto o: objetos){
                     if( pAtual.samePosition(o) && !pAtual.hasItem() ){
                         if (pAtual.HasTrap() && o instanceof Madeira)
-                            pAtual.tapaBuraco();
+                            pAtual.tapaBuraco(campo);
                         else
                             pAtual.adicionaItem(o);
                     }

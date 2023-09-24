@@ -2,6 +2,7 @@
 package ufpel.enthony.trabalhofinal;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.ImageIcon;
 
@@ -13,12 +14,15 @@ public class Agente extends Personagem {
     private     ArrayList<Objeto>   itens;
     private     int                 bateriaLanterna;
     private     boolean             hasGold;
+    private     int                 x, y;
 
     ImageIcon icone;
 
     public Agente() {
         super("Agente", new ImageIcon( "C:\\Users\\entho\\OneDrive\\Documentos\\GitHub\\Java_POO\\UFPel.Enthony.TrabalhoFinal\\src\\IconeAgente.png"));
         super.setPosition(new Posicao(0, 14));
+        x = 0;
+        y = 14;
 
         bateriaLanterna = 100;
         itens = new ArrayList<>();
@@ -48,12 +52,10 @@ public class Agente extends Personagem {
         itens.remove(item);
     }
 
-    public void usaLanterna(int direction, Campo[][] mapa, Posicao pAtual) {
+    public void usaLanterna(int direction, Campo[][] mapa) {
         if (bateriaLanterna == 0)
             return;
-        int x, y, i;
-        x = pAtual.getX();
-        y = pAtual.getY();
+        int i;
 
         if (bateriaLanterna > 0) {
             switch (direction) {
@@ -78,11 +80,53 @@ public class Agente extends Personagem {
         bateriaLanterna -= 50;
     }
 
+    public boolean tapaBuraco(int direction, Campo[][] mapa) {
+        boolean sucessful = false;
+
+        switch (direction) {
+            case DIREITA:
+                if (mapa[x+1][y].HasTrap()){
+                    mapa[x+1][y].tapaBuraco(mapa);
+                    sucessful = true;
+                }
+                break;
+            case ESQUERDA:
+                if (mapa[x-1][y].HasTrap()){
+                    mapa[x-1][y].tapaBuraco(mapa);
+                    sucessful = true;
+                }
+                break;
+            case CIMA:
+                if (mapa[x][y-1].HasTrap()){
+                    mapa[x][y-1].tapaBuraco(mapa);
+                    sucessful = true;
+                }
+                break;
+            case BAIXO:
+                if (mapa[x][y+1].HasTrap()){
+                    mapa[x][y+1].tapaBuraco(mapa);
+                    sucessful = true;
+                }
+                break;
+         }
+
+         if (!sucessful){
+            return false;
+         }
+
+         Iterator<Objeto> iterador = itens.iterator();
+         while (iterador.hasNext()){
+            Objeto item = iterador.next();
+            if(item instanceof Madeira){
+                iterador.remove();
+            }
+         }
+
+        return true;
+    }
+
     public boolean movimentar (Campo[][] mapa, int movimento){
         Campo pAtual, pProx;
-        int x, y;
-        x = position.getX();
-        y = position.getY();
 
         pAtual = mapa[x][y]; 
 
@@ -94,18 +138,7 @@ public class Agente extends Personagem {
         pProx = mapa[x][y];
 
         if (pProx.HasTrap()){
-            boolean hasWood = false;
-            for(Objeto o : itens) {
-                if (o instanceof Madeira){
-                    hasWood = true;
-                    pProx.tapaBuraco();
-                    itens.remove(o);
-                }    
-            }
-            if (!hasWood){
-                System.out.println("Você morreu");
                 vida = 0;
-            }
         } 
         
         pAtual.removePersonagem(this);
@@ -114,6 +147,45 @@ public class Agente extends Personagem {
         pProx.adicionaPersonagem(this);
         
         return true;
+    }
+
+    public boolean atirarFlecha(Campo[][] mapa, int movimento){
+        Campo pAtual = null;
+        switch(movimento){
+            case 1:
+                pAtual = mapa[x+1][y];
+                break;
+            case 2:
+                pAtual = mapa[x-1][y];
+                break;
+            case 3:
+                pAtual = mapa[x][y-1];
+                break;
+            case 4:
+                pAtual = mapa[x][y+1];
+                break;
+            default:
+                return false;
+        }
+
+        if (pAtual == null)
+            return false;
+        for (Personagem p : pAtual.getPersonagens()){
+            p.setVida(0);
+            ((Monstro)p).kill();
+            pAtual.removePersonagem(p);
+            break;
+        }
+        return true;
+    }
+    public void criaFlecha(){
+        for (Objeto item : itens){
+            if (item instanceof Madeira){
+                itens.remove(item);
+                itens.add(new Flecha());
+                return;
+            }
+        }
     }
 
     // Métodos Especiais

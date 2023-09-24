@@ -64,19 +64,6 @@ public abstract class Personagem extends JPanel{
     }
 
 
-    //Métodos Referentes a posição do Personagem e outros Personagens/Objetos
-    public boolean mesmoBloco (Personagem e){
-        return getPosition().equals(e.getPosition());
-    }
-    public boolean mesmoBloco (Objeto e){
-        return getPosition().equals(e.getPosition());
-    }
-    public boolean mesmoBloco(Buraco e){
-        return position.equals(e.getPosition());
-    }
-
-
-
     //
     public int getVida() {
         return vida;
@@ -95,7 +82,7 @@ public abstract class Personagem extends JPanel{
     public String getClasse (){
         return classe;
     }
-
+    
     public Posicao getPosition() {
         return position;
     }

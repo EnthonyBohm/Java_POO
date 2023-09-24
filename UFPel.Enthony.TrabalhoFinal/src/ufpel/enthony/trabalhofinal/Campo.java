@@ -15,16 +15,17 @@ import javax.swing.JPanel;
  * @author entho
  */
 public class Campo extends JPanel{
-    private     Set <Personagem>    personagens;
-    private     Objeto              item;
-    private     Posicao             position;
-    private     boolean             visivel;
-    private     boolean             hasItem, hasCharacter, hasTrap;
-    private     boolean             stinky, hasBreeze, hasShine, isStart;
-    private     GridBagConstraints  c;
-    private     Buraco              poco;
-    private     JPanel              painel, mensagens;
-    private     JLabel              fedor, brisa;
+    private         Set <Personagem>    personagens;
+    private         Objeto              item;
+    private         Posicao             position;
+    private         boolean             visivel;
+    private         boolean             hasItem, hasCharacter, hasTrap;
+    private         boolean             stinky, hasBreeze, hasShine, isStart;
+    private         GridBagConstraints  c;
+    private         Buraco              poco;
+    private         JPanel              painel, mensagens;
+    private         JLabel              fedor, brisa;
+    private final   int                 x,y;
     
     public Campo (int x, int y) {
         // Inicializa as variáveis
@@ -33,6 +34,8 @@ public class Campo extends JPanel{
         personagens =   new HashSet<>();
         position    =   new Posicao(x,y);
         mensagens   =   new JPanel(new GridBagLayout());
+        this.x      =   x;
+        this.y      =   y;
 
         // Inicializa as informações do Campo
         setPreferredSize(new Dimension(1, 1));
@@ -51,10 +54,6 @@ public class Campo extends JPanel{
         mensagens.setBackground(null);
         painel.add(mensagens);
 
-        //Definição das Restrições
-        // c.anchor    = GridBagConstraints.CENTER;
-        // c.weightx   = 1;
-        // c.weighty   = 1;
     }
     
     public void adicionaItem(Objeto o){        
@@ -111,9 +110,11 @@ public class Campo extends JPanel{
         // Adiciona o Poço ao painel;
         painel.add(poco);
     }
-    public void tapaBuraco (){
-        hasTrap = false;
+    public void tapaBuraco (Campo[][] mapa){
         painel.remove(poco);
+        hasTrap = false;
+        poco.removerBrisa(mapa, position);
+        this.setBackground(Color.decode("#964b00"));
     }
     public Buraco getBuraco  (){
         return poco;
@@ -142,11 +143,7 @@ public class Campo extends JPanel{
 
         //Adiciona Mensagem de brisa
         if (hasBreeze){
-            brisa = new JLabel("Brisa");
-            brisa.setFont(new Font("Comic Sans MS", 0, 10));
-            brisa.setVisible(true);
-            mensagens.add(brisa);
-            repaint();
+            adicionaBrisa();
         }  
         if (stinky) 
             adicionaFedor();
@@ -180,6 +177,21 @@ public class Campo extends JPanel{
             mensagens.remove(fedor);
             stinky = false;
         }
+    }
+    
+    public void adicionaBrisa(){
+        brisa = new JLabel("Brisa");
+        brisa.setFont(new Font("Comic Sans MS", 0, 10));
+        brisa.setVisible(true);
+        mensagens.add(brisa);
+        repaint();
+    }
+    public void removeBrisa(){
+        if (hasBreeze && visivel){
+            mensagens.remove(brisa);
+            hasBreeze = false;
+        }
+            
     }
     
     // Métodos Especiais

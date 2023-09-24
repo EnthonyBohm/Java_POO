@@ -28,7 +28,7 @@ public class Wumpus extends Monstro {
 
     @Override
     public void movimentar(Mapa mapa, Posicao pAtual) {
-
+        
         boolean done = false;
         Campo[][] campo = mapa.getCampo();
         Campo   atual, prox;
